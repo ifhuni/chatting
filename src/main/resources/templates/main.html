@@ -5,7 +5,27 @@
 </head>
 <body>
     <h2>메인 페이지</h2>
-    <p>로그인에 성공하였습니다.</p>
+    <p>환영합니다, <span th:text="${username}">User</span>님!</p>
+    
+    <h3>사용자 목록</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td>
+                    <button type="button" th:if="${user.username != username}">말걸기</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     
     <form th:action="@{/logout}" method="post">
         <button type="submit">로그아웃</button>

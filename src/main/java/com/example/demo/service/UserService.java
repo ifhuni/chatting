@@ -1,13 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.mapper.UserMapper;
-import com.example.demo.domain.User;
+import com.example.demo.controller.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +36,9 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
         userMapper.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userMapper.findAll();
     }
 }
