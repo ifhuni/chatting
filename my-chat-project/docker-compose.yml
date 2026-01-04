@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL 데이터베이스 서비스
+  postgres:
+    image: postgres:15-alpine
+    container_name: chat-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: chatdb
+    ports:
+      - "5432:5432" # 로컬 Spring Boot가 접속할 수 있도록 포트 개방
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # 데이터 영구 보존을 위한 볼륨
+
+  # 2. Node.js 서비스 (프론트엔드 또는 소켓 서버)
+  node-app:
+    build:
+      context: ./node-frontend
+      dockerfile: Dockerfile
+    container_name: chat-node
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./node-frontend:/app # 개발 중 코드 변경 시 실시간 반영을 위한 바인딩
+      - /app/node_modules
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  postgres_data:
